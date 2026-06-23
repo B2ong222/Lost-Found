@@ -1,5 +1,6 @@
 package com.dgsw.lostfound.dto;
 
+import com.dgsw.lostfound.model.ItemStatus;
 import lombok.*;
 
 @Getter
@@ -10,5 +11,6 @@ public class ItemDto {
 
     private Long id;
     private String itemName;
+    private ItemStatus status;
 
 }
