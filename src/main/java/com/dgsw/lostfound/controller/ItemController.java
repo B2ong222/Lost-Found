@@ -22,6 +22,19 @@ public class ItemController {
         this.itemRepository = itemRepository;
     }
 
+    // 1. 등록
+    @Operation(summary = "분실물 등록")
+    @PostMapping
+    public ItemDto createItem(@RequestBody ItemDto dto) {
+        Item item = new Item(
+                dto.getName(),
+                dto.getLocation(),
+                dto.getDescription(),
+                dto.getStatus() != null ? dto.getStatus() : ItemStatus.LOST.name()
+        );
+        return toDto(itemRepository.save(item));
+    }
+
     // 2. 전체 조회
     @Operation(summary = "분실물 전체 조회")
     @GetMapping
@@ -30,6 +43,21 @@ public class ItemController {
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    // 3. 수정
+    @Operation(summary = "분실물 수정")
+    @PutMapping("/{id}")
+    public ItemDto updateItem(@PathVariable Long id, @RequestBody ItemDto dto) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 아이템 없음: " + id));
+
+        if (dto.getName() != null) item.setName(dto.getName());
+        if (dto.getLocation() != null) item.setLocation(dto.getLocation());
+        if (dto.getDescription() != null) item.setDescription(dto.getDescription());
+        if (dto.getStatus() != null) item.setStatus(dto.getStatus());
+
+        return toDto(itemRepository.save(item));
     }
 
     // 5. 삭제
