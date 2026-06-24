@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/items")
 @Tag(name = "분실물 API", description = "분실물 등록/조회/수정/삭제 기능")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ItemController {
 
     private final ItemRepository itemRepository;
