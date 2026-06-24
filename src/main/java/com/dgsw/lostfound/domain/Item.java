@@ -1,17 +1,24 @@
-package com.dgsw.lostfound.dto;
+// domain/Item.java
+package com.dgsw.lostfound.domain;
 
-public class ItemDto {
+import jakarta.persistence.*;
+
+@Entity
+public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;        // 물건명
-    private String location;    // 분실/보관 장소
-    private String description; // 설명
-    private String status;      // 상태 (분실중, 보관중, 반환완료 등)
 
-    public ItemDto() {
+    private String name;
+    private String location;
+    private String description;
+    private String status;
+
+    public Item() {
     }
 
-    public ItemDto(Long id, String name, String location, String description, String status) {
-        this.id = id;
+    public Item(String name, String location, String description, String status) {
         this.name = name;
         this.location = location;
         this.description = description;
