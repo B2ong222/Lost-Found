@@ -2,6 +2,7 @@ package com.dgsw.lostfound.controller;
 
 import com.dgsw.lostfound.domain.Item;
 import com.dgsw.lostfound.dto.ItemDto;
+import com.dgsw.lostfound.model.ItemStatus;
 import com.dgsw.lostfound.repository.ItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,5 +51,31 @@ public class ItemController {
                 item.getDescription(),
                 item.getStatus()
         );
+    }
+
+    //4 상태변경
+    @Operation(summary = "분실물 상태 변경")
+    @PatchMapping("/{id}/status")
+    public ItemDto updateStatus(@PathVariable Long id,
+                                @RequestParam ItemStatus status) {
+
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 아이템 없음: " + id));
+
+        item.setStatus(status.name());
+        itemRepository.save(item);
+
+        return toDto(item);
+    }
+
+    //6 상태별 필터 조회
+    @Operation(summary = "상태별 분실물 조회")
+    @GetMapping("/filter")
+    public List<ItemDto> getItemsByStatus(@RequestParam ItemStatus status) {
+        return itemRepository.findAll()
+                .stream()
+                .filter(item -> item.getStatus().equals(status.name()))
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }
